@@ -15,7 +15,7 @@ public class Main {
 
 			for (int k = 0; k < nombreFichero.length; k++) {
 
-				reader = new BufferedReader(new FileReader(// b_small.in//c_medium.in//d_big.in
+				reader = new BufferedReader(new FileReader(
 						StringUtils.url + nombreFichero[k] + ".txt"));
 				String line = reader.readLine();
 				int lineN = 0;
@@ -57,9 +57,13 @@ public class Main {
 					int[] librosLibreria = new int[l.getNuLibros()];
 					line = reader.readLine();
 					splited = line.split("\\s+");
+					int puntuacion = 0;
 					for (int j = 0; j < l.getNuLibros(); j++) {
-						librosLibreria[j] = Integer.parseInt(splited[j]);
+						int idLibro = Integer.parseInt(splited[j]);
+						puntuacion += puntacionLibro[idLibro];
+						librosLibreria[j] = idLibro;
 					}
+					l.setPuntuacion(puntuacion);
 					l.setLibros(librosLibreria);
 					librerias[i] = l;
 				}

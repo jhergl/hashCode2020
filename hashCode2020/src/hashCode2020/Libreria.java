@@ -6,6 +6,7 @@ public class Libreria {
 	private int nuLibros;
 	private int nuDiasSignUp;
 	private int nuEscaneadosAlDia;
+	private int puntuacion;
 
 	private int[] libros;
 
@@ -47,5 +48,13 @@ public class Libreria {
 
 	public void setIndiceLibreria(int indiceLibreria) {
 		this.indiceLibreria = indiceLibreria;
+	}
+
+	public int getPuntuacion() {
+		return puntuacion;
+	}
+
+	public void setPuntuacion(int puntuacion) {
+		this.puntuacion = puntuacion;
 	}
 }
