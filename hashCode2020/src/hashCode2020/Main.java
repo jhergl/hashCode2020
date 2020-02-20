@@ -67,7 +67,7 @@ public class Main {
 				
 				reader.close();
 			
-				Utils.writeFile(Utils.solucionLineal(nuDiasEscanear, librerias, puntacionLibro), "C:/Users/jesherna/Desktop/HASHCODE/SOLUCIONES/"+nombreFichero[k]+".txt");
+				Utils.writeFile(Utils.solucionLineal2(nuDiasEscanear, librerias, puntacionLibro), "C:/Users/jesherna/Desktop/HASHCODE/SOLUCIONES/"+nombreFichero[k]+".txt");
 				
 			
 			}

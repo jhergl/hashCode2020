@@ -63,5 +63,33 @@ public class Utils {
 		return solucion;
 	}
 	
+	public static List<LibreriaSolucion> solucionLineal2(int nuDiasEscanear, Libreria [] librerias, int [] puntacionLibro){
+		List<LibreriaSolucion> solucion = new ArrayList<LibreriaSolucion>();
+		Set<Integer> librosEscaneados= new HashSet<Integer>();
+		List<Libreria> libs = Arrays.asList(librerias);
+		//Ordenamos las librerias 
+		libs = libs.stream()
+				.sorted((o1, o2) ->   o2.getNuEscaneadosAlDia()-o1.getNuEscaneadosAlDia())
+				.collect(Collectors.toList());
+		
+		libs.forEach(l->{
+			for(int i = 0; i<l.getLibros().length;i++) {
+				if(!librosEscaneados.contains(l.getLibros()[i])) {
+					LibreriaSolucion ls = new LibreriaSolucion();
+					ls.setIndiceLibreria(l.getIndiceLibreria());
+					ls.setLibros(l.getLibros());
+					ls.setNuLibrosEnviados(l.getLibros().length);
+					solucion.add(ls);
+					break;
+				}
+			}
+		});
+		
+		return solucion;
+	}
+	
+	
+	
+	
 	
 }
