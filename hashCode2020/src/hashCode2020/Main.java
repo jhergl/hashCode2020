@@ -40,11 +40,13 @@ public class Main {
 					i++;
 				}
 			}
+			
 			//Cargamos librerias
 			for(int i = 0; i<nuLibrerias;i++) {
 				line = reader.readLine();
 				String[] splited = line.split("\\s+");
 				Libreria l =  new Libreria();
+				l.setIndiceLibreria(i);
 				l.setNuLibros(Integer.parseInt(splited[0]));
 				l.setNuDiasSignUp(Integer.parseInt(splited[1]));
 				l.setNuEscaneadosAlDia(Integer.parseInt(splited[2]));
@@ -57,6 +59,12 @@ public class Main {
 				l.setLibros(librosLibreria);
 				librerias[i]= l;
 			}
+			
+			
+			// 
+			
+			
+			
 			reader.close();
 		
 			List<String> finalSolution = new ArrayList<String>();
