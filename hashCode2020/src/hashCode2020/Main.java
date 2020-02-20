@@ -12,7 +12,7 @@ public class Main {
 		BufferedReader reader;
 		try {
 			reader = new BufferedReader(new FileReader(//b_small.in//c_medium.in//d_big.in
-					"C:/Users/jesherna/Desktop/HASHCODE/a_example.txt"));
+					"C:/Users/olmatuni/Desktop/HashCode/a_example.txt"));
 			String line = reader.readLine();
 			int lineN = 0;
 			int nuLibros = 0;
@@ -71,13 +71,18 @@ public class Main {
 			
 			if(true){
 				System.out.println("SOLUCION GENERAL VALIDA!!");
-				Utils.writeFile("/Users/Jesus/Downloads/nombreFichero.out", finalSolution);
+				Utils.writeFile("nombreFichero.out", finalSolution);
 				System.out.println("SCORE->"+"valor de la solucion");
 			}else{
 				System.out.println("SOLUCION GENERAL NO VALIDA");
-				Utils.writeFile("/Users/Jesus/Downloads/ERROR_EN_SOLUCION.out", finalSolution);
+				Utils.writeFile("ERROR_EN_SOLUCION.out", finalSolution);
 			}
-					
+				
+			
+			
+			
+			
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
