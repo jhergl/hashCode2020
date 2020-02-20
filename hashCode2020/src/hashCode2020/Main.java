@@ -12,37 +12,50 @@ public class Main {
 		BufferedReader reader;
 		try {
 			reader = new BufferedReader(new FileReader(//b_small.in//c_medium.in//d_big.in
-					"/Users/Jesus/Downloads/d_big.in"));
+					"C:/Users/jesherna/Desktop/HASHCODE/a_example.txt"));
 			String line = reader.readLine();
 			int lineN = 0;
-			int rows = 0;
-			int row = 0;
-			int column = 0;
-			while (line != null) {
-				//read first line to take args
-				if(lineN==0) {
-					String[] splited = line.split("\\s+");
-					lineN++;
-					row =Integer.parseInt(splited[0]);
-					column = Integer.parseInt(splited[1]);
-					matriz = new char [row][column];	
+			int nuLibros = 0;
+			int nuLibrerias = 0;
+			int nuDiasEscanear = 0;
+			int [] puntacionLibro = null;
+			
+			//read first line to take args
+			if(lineN==0) {
+				String[] splited = line.split("\\s+");
+				nuLibros = Integer.parseInt(splited[0]);
+				nuLibrerias = Integer.parseInt(splited[1]);
+				nuDiasEscanear = Integer.parseInt(splited[2]);
 
-				}
-				else {
-					for (int i = 0; i < line.length(); i++) {
-						matriz[rows][i]=line.charAt(i);
-					}
-					rows++;
-				}
-				// read next line
-				line = reader.readLine();
 			}
-			//read our matrix
-			for (int i = 0; i < rows; i++) {
-				for (int j = 0; j < matriz[i].length; j++) {
-					System.out.print(matriz[i][j]);
+			Libreria [] librerias = new Libreria [nuLibrerias];
+			line = reader.readLine();
+			lineN++;
+			if(lineN==1) {
+				String[] splited = line.split("\\s+");
+				puntacionLibro = new int[nuLibros];
+				int i = 0;
+				for(String str: splited) {
+					puntacionLibro[i] = Integer.parseInt(str);
+					i++;
 				}
-				System.out.print("\n");
+			}
+			//Cargamos librerias
+			for(int i = 0; i<nuLibrerias;i++) {
+				line = reader.readLine();
+				String[] splited = line.split("\\s+");
+				Libreria l =  new Libreria();
+				l.setNuLibros(Integer.parseInt(splited[0]));
+				l.setNuDiasSignUp(Integer.parseInt(splited[1]));
+				l.setNuEscaneadosAlDia(Integer.parseInt(splited[2]));
+				int [] librosLibreria = new int [l.getNuLibros()];
+				line = reader.readLine();
+				splited = line.split("\\s+");
+				for(int j = 0; j<l.getNuLibros();j++) {
+					librosLibreria[j]=Integer.parseInt(splited[j]);
+				}
+				l.setLibros(librosLibreria);
+				librerias[i]= l;
 			}
 			reader.close();
 		
