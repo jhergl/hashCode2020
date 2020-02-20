@@ -11,75 +11,66 @@ public class Main {
 
 		BufferedReader reader;
 		try {
-			reader = new BufferedReader(new FileReader(//b_small.in//c_medium.in//d_big.in
-					"C:/Users/olmatuni/Desktop/HashCode/a_example.txt"));
-			String line = reader.readLine();
-			int lineN = 0;
-			int nuLibros = 0;
-			int nuLibrerias = 0;
-			int nuDiasEscanear = 0;
-			int [] puntacionLibro = null;
+			String [] nombreFichero = {"a_example","b_read_on","c_incunabula","d_tough_choices","e_so_many_books","f_libraries_of_the_world"};
 			
-			//read first line to take args
-			if(lineN==0) {
-				String[] splited = line.split("\\s+");
-				nuLibros = Integer.parseInt(splited[0]);
-				nuLibrerias = Integer.parseInt(splited[1]);
-				nuDiasEscanear = Integer.parseInt(splited[2]);
-
-			}
-			Libreria [] librerias = new Libreria [nuLibrerias];
-			line = reader.readLine();
-			lineN++;
-			if(lineN==1) {
-				String[] splited = line.split("\\s+");
-				puntacionLibro = new int[nuLibros];
-				int i = 0;
-				for(String str: splited) {
-					puntacionLibro[i] = Integer.parseInt(str);
-					i++;
+			for (int k = 0; k < nombreFichero.length; k++) {
+				
+				
+				reader = new BufferedReader(new FileReader(//b_small.in//c_medium.in//d_big.in
+						"C:/Users/jesherna/Desktop/HASHCODE/"+nombreFichero[k]+".txt"));
+				String line = reader.readLine();
+				int lineN = 0;
+				int nuLibros = 0;
+				int nuLibrerias = 0;
+				int nuDiasEscanear = 0;
+				int [] puntacionLibro = null;
+				
+				//read first line to take args
+				if(lineN==0) {
+					String[] splited = line.split("\\s+");
+					nuLibros = Integer.parseInt(splited[0]);
+					nuLibrerias = Integer.parseInt(splited[1]);
+					nuDiasEscanear = Integer.parseInt(splited[2]);
+	
 				}
-			}
-			
-			//Cargamos librerias
-			for(int i = 0; i<nuLibrerias;i++) {
+				Libreria [] librerias = new Libreria [nuLibrerias];
 				line = reader.readLine();
-				String[] splited = line.split("\\s+");
-				Libreria l =  new Libreria();
-				l.setIndiceLibreria(i);
-				l.setNuLibros(Integer.parseInt(splited[0]));
-				l.setNuDiasSignUp(Integer.parseInt(splited[1]));
-				l.setNuEscaneadosAlDia(Integer.parseInt(splited[2]));
-				int [] librosLibreria = new int [l.getNuLibros()];
-				line = reader.readLine();
-				splited = line.split("\\s+");
-				for(int j = 0; j<l.getNuLibros();j++) {
-					librosLibreria[j]=Integer.parseInt(splited[j]);
+				lineN++;
+				if(lineN==1) {
+					String[] splited = line.split("\\s+");
+					puntacionLibro = new int[nuLibros];
+					int i = 0;
+					for(String str: splited) {
+						puntacionLibro[i] = Integer.parseInt(str);
+						i++;
+					}
 				}
-				l.setLibros(librosLibreria);
-				librerias[i]= l;
-			}
+				
+				//Cargamos librerias
+				for(int i = 0; i<nuLibrerias;i++) {
+					line = reader.readLine();
+					String[] splited = line.split("\\s+");
+					Libreria l =  new Libreria();
+					l.setIndiceLibreria(i);
+					l.setNuLibros(Integer.parseInt(splited[0]));
+					l.setNuDiasSignUp(Integer.parseInt(splited[1]));
+					l.setNuEscaneadosAlDia(Integer.parseInt(splited[2]));
+					int [] librosLibreria = new int [l.getNuLibros()];
+					line = reader.readLine();
+					splited = line.split("\\s+");
+					for(int j = 0; j<l.getNuLibros();j++) {
+						librosLibreria[j]=Integer.parseInt(splited[j]);
+					}
+					l.setLibros(librosLibreria);
+					librerias[i]= l;
+				}
+				
+				reader.close();
 			
-			
-			// 
-			
-			
-			
-			reader.close();
-		
-			List<String> finalSolution = new ArrayList<String>();
-			
-			if(true){
-				System.out.println("SOLUCION GENERAL VALIDA!!");
-				Utils.writeFile("nombreFichero.out", finalSolution);
-				System.out.println("SCORE->"+"valor de la solucion");
-			}else{
-				System.out.println("SOLUCION GENERAL NO VALIDA");
-				Utils.writeFile("ERROR_EN_SOLUCION.out", finalSolution);
-			}
+				Utils.writeFile(Utils.solucionLineal(nuDiasEscanear, librerias, puntacionLibro), "C:/Users/jesherna/Desktop/HASHCODE/SOLUCIONES/"+nombreFichero[k]+".txt");
 				
 			
-			
+			}
 			
 			
 			

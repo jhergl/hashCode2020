@@ -24,19 +24,21 @@ public class Utils {
 			
 			escribir.println(lines.get(i).getIndiceLibreria()+" "+lines.get(i).getLibros().length);
 			
-			for (int j = 0; j < lines.get(i).getLibros().length; j++) {
-				escribir.print(lines.get(i).getLibros()[j]);
-			}
-			escribir.println();
 			
+			String linea = "";
+			for (int j = 0; j < lines.get(i).getLibros().length; j++) {
+				linea +=lines.get(i).getLibros()[j]+" ";
+			}
+			escribir.println(linea.trim());
 		}
+		escribir.close();
 		
 		
 	}
 	
 	
 	
-	public List<LibreriaSolucion> solucionLineal(int nuDiasEscanear, Libreria [] librerias, int [] puntacionLibro){
+	public static List<LibreriaSolucion> solucionLineal(int nuDiasEscanear, Libreria [] librerias, int [] puntacionLibro){
 		List<LibreriaSolucion> solucion = new ArrayList<LibreriaSolucion>();
 		Set<Integer> librosEscaneados= new HashSet<Integer>();
 		List<Libreria> libs = Arrays.asList(librerias);
