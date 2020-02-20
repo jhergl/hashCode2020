@@ -5,7 +5,9 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class Main {
-	
+
+	static int[] puntacionLibro = null;
+
 	public static void main(String[] args) {
 
 		BufferedReader reader;
@@ -15,14 +17,12 @@ public class Main {
 
 			for (int k = 0; k < nombreFichero.length; k++) {
 
-				reader = new BufferedReader(new FileReader(
-						StringUtils.url + nombreFichero[k] + ".txt"));
+				reader = new BufferedReader(new FileReader(StringUtils.url + nombreFichero[k] + ".txt"));
 				String line = reader.readLine();
 				int lineN = 0;
 				int nuLibros = 0;
 				int nuLibrerias = 0;
 				int nuDiasEscanear = 0;
-				int[] puntacionLibro = null;
 
 				// read first line to take args
 				if (lineN == 0) {
@@ -54,7 +54,7 @@ public class Main {
 					l.setNuLibros(Integer.parseInt(splited[0]));
 					l.setNuDiasSignUp(Integer.parseInt(splited[1]));
 					l.setNuEscaneadosAlDia(Integer.parseInt(splited[2]));
-					int[] librosLibreria = new int[l.getNuLibros()];
+					Integer[] librosLibreria = new Integer[l.getNuLibros()];
 					line = reader.readLine();
 					splited = line.split("\\s+");
 					int puntuacion = 0;
@@ -64,7 +64,8 @@ public class Main {
 						librosLibreria[j] = idLibro;
 					}
 					l.setPuntuacion(puntuacion);
-					l.setLibros(librosLibreria);
+					int[] fff = Utils.ordenarLibrosPorPuntuacion(librosLibreria);
+					l.setLibros(fff);
 					librerias[i] = l;
 				}
 

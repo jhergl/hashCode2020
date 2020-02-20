@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 public class Utils {
 
+	static Set<Integer> librosEscaneados = new HashSet<Integer>();
+
 	public static void writeFile(List<LibreriaSolucion> lines, String tipo) throws FileNotFoundException {
 
 		PrintWriter escribir = new PrintWriter(tipo);
@@ -33,7 +35,6 @@ public class Utils {
 	public static List<LibreriaSolucion> solucionLineal(int nuDiasEscanear, Libreria[] librerias,
 			int[] puntacionLibro) {
 		List<LibreriaSolucion> solucion = new ArrayList<LibreriaSolucion>();
-		Set<Integer> librosEscaneados = new HashSet<Integer>();
 		List<Libreria> libs = Arrays.asList(librerias);
 		// Ordenamos las librerias
 		libs = libs.stream().sorted((o1, o2) -> o1.getNuDiasSignUp() - o2.getNuDiasSignUp())
@@ -58,35 +59,57 @@ public class Utils {
 	public static List<LibreriaSolucion> solucionLineal2(int nuDiasEscanear, Libreria[] librerias,
 			int[] puntacionLibro) {
 		List<LibreriaSolucion> solucion = new ArrayList<LibreriaSolucion>();
-		Set<Integer> librosEscaneados = new HashSet<Integer>();
 		List<Libreria> libs = Arrays.asList(librerias);
 		// Ordenamos las librerias
-		libs = sort(libs);
+		librosEscaneados = new HashSet<Integer>();
 
-		libs.forEach(l -> {
-			for (int i = 0; i < l.getLibros().length; i++) {
-				if (!librosEscaneados.contains(l.getLibros()[i])) {
-					LibreriaSolucion ls = new LibreriaSolucion();
-					ls.setIndiceLibreria(l.getIndiceLibreria());
-					ls.setLibros(l.getLibros());
-					ls.setNuLibrosEnviados(l.getLibros().length);
-					solucion.add(ls);
-					break;
-				}
+		for (int i = 0; i < librerias.length; i++) {
+			libs = sort(libs);
+			LibreriaSolucion ls = new LibreriaSolucion();
+			ls.setIndiceLibreria(libs.get(0).getIndiceLibreria());
+			ls.setLibros(libs.get(0).getLibros());
+			for (int j = 0; j < ls.getLibros().length; j++) {
+				librosEscaneados.add(ls.getLibros()[j]);
 			}
-		});
+			ls.setNuLibrosEnviados(libs.get(0).getLibros().length);
+			solucion.add(ls);
+			libs.remove(libs.get(0));
+			recalcularPuntuacion(libs);
+		}
 
 		return solucion;
+	}
+
+	private static void recalcularPuntuacion(List<Libreria> libs) {
+		libs.forEach(l -> {
+			int puntuacion = 0;
+			int numLibs = 0;
+			for (int j = 0; j < l.getNuLibros(); j++) {
+				if (!librosEscaneados.contains(l.getLibros()[j])) {
+					puntuacion += Main.puntacionLibro[l.getLibros()[j]];
+					numLibs++;
+				}
+			}
+			l.setNuLibros(numLibs);
+			l.setPuntuacion(puntuacion);
+		});
+
 	}
 
 	public static List<Libreria> sort(List<Libreria> librerias) {
 
 		return librerias.stream().sorted((o1, o2) -> {
 
-			return (o1.getPuntuacion() / (o1.getNuDiasSignUp() + o1.getNuLibros() / o1.getNuEscaneadosAlDia()))
-					- (o2.getPuntuacion() / (o2.getNuDiasSignUp() + o2.getNuLibros() / o2.getNuEscaneadosAlDia()));
+			return (o2.getPuntuacion() / o2.getNuEscaneadosAlDia() * o2.getNuDiasSignUp() + o2.getNuLibros() / o2.getNuEscaneadosAlDia())
+					- (o1.getPuntuacion() / o1.getNuEscaneadosAlDia() * o1.getNuDiasSignUp() + o1.getNuLibros() / o1.getNuEscaneadosAlDia());
 
 		}).collect(Collectors.toList());
+	}
+
+	public static int[] ordenarLibrosPorPuntuacion(Integer[] librosLibreria) {
+		return Arrays.asList(librosLibreria).stream().sorted((l1, l2) -> {
+			return Main.puntacionLibro[l2] - Main.puntacionLibro[l1];
+		}).mapToInt(Integer::intValue).toArray();
 	}
 
 }
