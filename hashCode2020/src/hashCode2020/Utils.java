@@ -130,10 +130,105 @@ public class Utils {
 
 		return librerias.stream().sorted((o1, o2) -> {
 
-			return (o1.getPuntuacion() / (o1.getNuDiasSignUp() + o1.getNuLibros() / o1.getNuEscaneadosAlDia()))
-					- (o2.getPuntuacion() / (o2.getNuDiasSignUp() + o2.getNuLibros() / o2.getNuEscaneadosAlDia()));
-
+			return (o2.getPuntuacion()*o2.getNuEscaneadosAlDia() / (o2.getNuDiasSignUp()))
+					- (o1.getPuntuacion()*o1.getNuEscaneadosAlDia() / (o1.getNuDiasSignUp()));
+//			return o1.getPuntuacion()-o1.getNuDiasSignUp() - o2.getPuntuacion()+o2.getNuDiasSignUp();
+			
 		}).collect(Collectors.toList());
 	}
+	
+	
+	public static List<LibreriaSolucion> solucionConRecalculos(int nuDiasEscanear, Libreria[] librerias,
+			int[] puntacionLibro) {
+		List<LibreriaSolucion> solucion = new ArrayList<LibreriaSolucion>();
+		Set<Integer> librosEscaneados = new HashSet<Integer>();
+		List<Libreria> libs = new ArrayList<Libreria>(Arrays.asList(librerias));
+		//Ordenamos las librerias 
+		
+		while (libs.size()>0) {
+			int index = getIndexLibreriaAnadir(libs, puntacionLibro, librosEscaneados);
+			
+			if(index==-1) {
+				break;
+			}
+			
+			for(int i = 0; i<libs.size();i++) {
+				if(libs.get(i).getIndiceLibreria() == index) {
+					LibreriaSolucion ls = new LibreriaSolucion();
+					ls.setIndiceLibreria(libs.get(i).getIndiceLibreria());
+					int nuLibrosNoEnviados = 0;
+					for(int j = 0; j<libs.get(i).getLibros().length;j++) {
+						if(!librosEscaneados.contains(libs.get(i).getLibros()[j])) {
+							nuLibrosNoEnviados++;
+						}
+					}
+					int [] librosNoEnviados = new int[nuLibrosNoEnviados];
+					int k = 0;
+					for(int j = 0; j<libs.get(i).getLibros().length;j++) {
+						if(!librosEscaneados.contains(libs.get(i).getLibros()[j])) {
+							librosNoEnviados[k] = libs.get(i).getLibros()[j];
+							librosEscaneados.add(libs.get(i).getLibros()[j]);
+							k++;
+						}
+					}
+					ls.setLibros(librosNoEnviados);
+					ls.setNuLibrosEnviados(librosNoEnviados.length);
+					solucion.add(ls);
+					index = i;
+					break;
+				}
+			}
+			libs.remove(index);
+		}
+		return solucion;
+	}
+	
+	public static int getIndexLibreriaAnadir(List<Libreria> libs, int[] puntacionLibro, Set<Integer> librosEscaneados) {
+		Integer index= null;
+		recalculaEvaluaciones(libs, librosEscaneados, puntacionLibro);
+		libs = sort(libs);
+		for(int j = 0; j<libs.size();j++) {
+			for(int i = 0; i<libs.get(j).getLibros().length;i++) {
+				if(!librosEscaneados.contains(libs.get(j).getLibros()[i])) {
+					index = libs.get(j).getIndiceLibreria();
+					break;
+				}
+			}
+			if(index != null) {
+				break;
+			}
+		}
+		if(index == null) {
+			return -1;
+		}
+		return index;
+	}
+	
+	public static void recalculaEvaluaciones(List<Libreria> libs, Set<Integer> librosEscaneados,int[] puntacionLibro) {
+
+		libs.forEach(l->{
+			List<Integer> nuevaListaLibros = new ArrayList<Integer>();
+			for (Integer integer : l.getLibros()) {
+				if(!librosEscaneados.contains(integer)) {
+					nuevaListaLibros.add(integer);
+				}
+			}
+			int[]nuevoArray = new int[nuevaListaLibros.size()];
+			for (int i = 0;i<nuevaListaLibros.size();i++) {
+				nuevoArray[i] = nuevaListaLibros.get(i);
+			}
+			l.setLibros(nuevoArray);
+			l.setNuLibros(nuevoArray.length);
+			int puntuacion = 0;
+			for (int j = 0; j < l.getNuLibros(); j++) {
+				int idLibro = nuevoArray[j];
+				puntuacion += puntacionLibro[idLibro];
+			}
+			l.setPuntuacion(puntuacion);
+			
+		});
+
+	}
+	
 
 }
