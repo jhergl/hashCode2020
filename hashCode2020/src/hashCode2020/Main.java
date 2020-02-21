@@ -70,7 +70,7 @@ public class Main {
 
 				reader.close();
 
-				Utils.writeFile(Utils.solucionLineal2(nuDiasEscanear, librerias, puntacionLibro),
+				Utils.writeFile(Utils.solucionConRecalculos(nuDiasEscanear, librerias, puntacionLibro),
 						StringUtils.url + "/SOLUCIONES/" + nombreFichero[k] + ".txt");
 
 			}
