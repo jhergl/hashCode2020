@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -42,9 +43,10 @@ public class Main {
 
 	private static void process() {
 		librosEscaneados = new HashSet<>();
+		solution = new ArrayList<>();
 		diaActual = 0;
 		LibreriaSolucion ls;
-		for (int i = 0; i < librerias.size(); i++) {
+		for (int i = 0; i < nuLibrerias; i++) {
 			calcularPuntuacion();
 			librerias = sort();
 			libreria = librerias.get(0);
@@ -61,8 +63,20 @@ public class Main {
 	}
 
 	private static void calcularPuntuacion() {
-		// TODO Auto-generated method stub
-
+		librerias.forEach(l -> {
+			int puntuacion = 0;
+			int numLibs = 0;
+			for (int j = 0; j < l.getNuLibros(); j++) {
+				if (librosEscaneados.contains(l.getLibros().get(j))) {
+					l.getLibros().remove(j);
+				} else {
+					numLibs++;
+					puntuacion += puntuaciones[l.getLibros().get(j)];
+				}
+			}
+			l.setNuLibros(numLibs);
+			l.setPuntuacion(puntuacion);
+		});
 	}
 
 	private static void marcarLibrosEscaneados(LibreriaSolucion ls) {
@@ -128,7 +142,7 @@ public class Main {
 			libreria.setNuDiasSignUp(Integer.parseInt(splited[1]));
 			libreria.setNuEscaneadosAlDia(Integer.parseInt(splited[2]));
 
-			librosLibreria = new ArrayList<>(libreria.getNuLibros());
+			librosLibreria = new LinkedList<>();
 			line = reader.readLine();
 			splited = line.split(" ");
 
