@@ -130,10 +130,17 @@ public class Utils {
 
 		return librerias.stream().sorted((o1, o2) -> {
 
-			return (o2.getPuntuacion()*o2.getNuEscaneadosAlDia() / (o2.getNuDiasSignUp()))
-					- (o1.getPuntuacion()*o1.getNuEscaneadosAlDia() / (o1.getNuDiasSignUp()));
+			return (o2.getPuntuacion() / (o2.getNuDiasSignUp()))
+					- (o1.getPuntuacion() / (o1.getNuDiasSignUp()));
 //			return o1.getPuntuacion()-o1.getNuDiasSignUp() - o2.getPuntuacion()+o2.getNuDiasSignUp();
 			
+		}).collect(Collectors.toList());
+	}
+	
+	public static List<Integer> sort(List<Integer> libros,int[] puntacionLibro) {
+
+		return libros.stream().sorted((o1, o2) -> {
+			return (puntacionLibro[o2])	- (puntacionLibro[o1]);			
 		}).collect(Collectors.toList());
 	}
 	
@@ -143,8 +150,11 @@ public class Utils {
 		List<LibreriaSolucion> solucion = new ArrayList<LibreriaSolucion>();
 		Set<Integer> librosEscaneados = new HashSet<Integer>();
 		List<Libreria> libs = new ArrayList<Libreria>(Arrays.asList(librerias));
-		//Ordenamos las librerias 
+
+		//Ordenamos los libros de cada libreria por orden de puntuacion
+		ordenarLibrosEnLibrerias(libs, puntacionLibro);
 		
+		//Ordenamos las librerias 
 		while (libs.size()>0) {
 			int index = getIndexLibreriaAnadir(libs, puntacionLibro, librosEscaneados);
 			
@@ -230,5 +240,20 @@ public class Utils {
 
 	}
 	
+	
+	public static void ordenarLibrosEnLibrerias(List<Libreria> libs,int[] puntacionLibro) {
+		for (Libreria l : libs) {
+			List<Integer> list = new ArrayList<Integer>();
+			for(int i =0;i<l.getLibros().length;i++) {
+				list.add(l.getLibros()[i]);
+			}
+			list = sort(list, puntacionLibro);
+			int[] newArray = new int[list.size()];
+			for (int i = 0; i < newArray.length; i++) {
+				newArray[i] = list.get(i).intValue();
+			}
+			l.setLibros(newArray);
+		}
+	}
 
 }
