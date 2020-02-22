@@ -27,7 +27,7 @@ public class Libreria {
 		this.nuLibros = nuLibros;
 	}
 
-	public int getNuDiasSignUp() {
+	public Integer getNuDiasSignUp() {
 		return nuDiasSignUp;
 	}
 

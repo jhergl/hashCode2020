@@ -38,18 +38,22 @@ public class Main {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	private static void process() {
 		librosEscaneados = new HashSet<>();
 		solution = new ArrayList<>();
-		diaActual = 0;
+		diaActual = 1;
 		LibreriaSolucion ls;
+		ordernarLibros();
 		for (int i = 0; i < nuLibrerias; i++) {
 			calcularPuntuacion();
 			librerias = sort();
 			libreria = librerias.get(0);
+			librerias.remove(libreria);
+			if (libreria.getNuLibros() == 0) {
+				continue;
+			}
 			diaActual += libreria.getNuDiasSignUp();
 			ls = new LibreriaSolucion();
 			ls.setIndiceLibreria(libreria.getIndiceLibreria());
@@ -57,23 +61,31 @@ public class Main {
 			marcarLibrosEscaneados(ls);
 			ls.setNuLibrosEnviados(libreria.getLibros().size());
 			solution.add(ls);
-			librerias.remove(libreria);
 		}
 
+	}
+
+	private static void ordernarLibros() {
+		librerias.forEach(l -> {
+			l.setLibros(l.getLibros().stream().sorted((o1, o2) -> puntuaciones[o2] - puntuaciones[o1])
+					.collect(Collectors.toList()));
+		});
 	}
 
 	private static void calcularPuntuacion() {
 		librerias.forEach(l -> {
 			int puntuacion = 0;
 			int numLibs = 0;
+			List<Integer> libs = new LinkedList<>(l.getLibros());
 			for (int j = 0; j < l.getNuLibros(); j++) {
 				if (librosEscaneados.contains(l.getLibros().get(j))) {
-					l.getLibros().remove(j);
+					libs.remove(l.getLibros().get(j));
 				} else {
 					numLibs++;
 					puntuacion += puntuaciones[l.getLibros().get(j)];
 				}
 			}
+			l.setLibros(libs);
 			l.setNuLibros(numLibs);
 			l.setPuntuacion(puntuacion);
 		});
@@ -87,17 +99,15 @@ public class Main {
 
 	private static List<Libreria> sort() {
 		return librerias.stream().sorted((o1, o2) -> {
-			return (o2.getPuntuacion() / o2.getNuEscaneadosAlDia() * o2.getNuDiasSignUp()
-					+ o2.getNuLibros() / o2.getNuEscaneadosAlDia())
-					- (o1.getPuntuacion() / o1.getNuEscaneadosAlDia() * o1.getNuDiasSignUp()
-							+ o1.getNuLibros() / o1.getNuEscaneadosAlDia());
+			return (o2.getPuntuacion() / o2.getNuDiasSignUp() * o2.getNuEscaneadosAlDia())
+					- (o1.getPuntuacion() / o1.getNuDiasSignUp() * o1.getNuEscaneadosAlDia());
 
 		}).collect(Collectors.toList());
 	}
 
 	private static void writeSolution(String file) throws FileNotFoundException {
 		String linea;
-		PrintWriter writer = new PrintWriter(file);
+		PrintWriter writer = new PrintWriter(Constants.RESOURCES_URL + "out/" + file + ".txt");
 		writer.println(solution.size());
 		for (int i = 0; i < solution.size(); i++) {
 			writer.println(solution.get(i).getIndiceLibreria() + " " + solution.get(i).getLibros().size());
@@ -145,7 +155,9 @@ public class Main {
 			librosLibreria = new LinkedList<>();
 			line = reader.readLine();
 			splited = line.split(" ");
-
+			for (int j = 0; j < libreria.getNuLibros(); j++) {
+				librosLibreria.add(Integer.parseInt(splited[j]));
+			}
 			libreria.setLibros(librosLibreria);
 			librerias.add(libreria);
 		}
