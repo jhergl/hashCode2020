@@ -1,14 +1,17 @@
 package hashCode2020.kuni;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class Library {
 
 	public static int[] bookScores = null;
 	public static int[] bookRepeated = null;
 	public static boolean[] bookUsed = null;
+	static Map<Integer, List<Library>> mapLibros = null;
 
 	private Integer index;
 	private Integer numBooks;
@@ -140,6 +143,27 @@ public class Library {
 			}
 			day++;
 		}
+		this.scannedBooks = scannedBooks;
+	}
+	
+	public void scanBooks2(Integer day, Integer totalDays) {
+		List<Integer> scannedBooks = new LinkedList<Integer>();
+		List<Integer> booksCopy = new ArrayList<Integer>(books);
+		Iterator<Integer> it = booksCopy.iterator();
+		while (day < totalDays && it.hasNext()) {
+			int i = 0;
+			while (it.hasNext() && i < shipPerDay) {
+				Integer book = it.next();
+				for (Library l : mapLibros.get(book)) {
+					l.getBooks().remove(book);
+				}
+				mapLibros.remove(book);
+				scannedBooks.add(book);
+				i++;
+			}
+			day++;
+		}
+		System.out.println(day);
 		this.scannedBooks = scannedBooks;
 	}
 

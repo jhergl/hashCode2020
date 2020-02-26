@@ -5,9 +5,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class Main {
 
@@ -47,6 +50,7 @@ public class Main {
 				}
 
 				// Loading libraries
+				Library.mapLibros = new HashMap<>();
 				for (int i = 0; i < totalLibraries; i++) {
 					line = reader.readLine();
 					String[] splited = line.split("\\s+");
@@ -60,7 +64,11 @@ public class Main {
 					line = reader.readLine();
 					splited = line.split("\\s+");
 					for (String s : splited) {
-						int book = Integer.valueOf(s);
+						Integer book = Integer.valueOf(s);
+						if (!Library.mapLibros.containsKey(book)) {
+							Library.mapLibros.put(book, new ArrayList<Library>());
+						}
+						Library.mapLibros.get(book).add(l);
 						Library.bookRepeated[book]++;
 						books.add(book);
 					}
@@ -71,7 +79,7 @@ public class Main {
 				reader.close();
 				
 //				Backtracking.backtracking(librerias, totalLibraries, totalDays);
-
+				
 				
 				List<Library> solutions;
 				switch (input) {
@@ -79,13 +87,13 @@ public class Main {
 //					solutions = Algorithm.B(totalBooks, totalLibraries, totalDays, librerias);
 //					break;
 //				case D:
-//					solutions = Algorithm.D(totalBooks, totalLibraries, totalDays, librerias);
+//					solutions = Algorithm.DD(totalBooks, totalLibraries, totalDays, librerias);
 //					break;
-				case E:
-					solutions = Algorithm.E(totalBooks, totalLibraries, totalDays, librerias);
-					break;
+//				case E:
+//					solutions = Algorithm.E(totalBooks, totalLibraries, totalDays, librerias);
+//					break;
 				default:
-					solutions = Algorithm.A(totalBooks, totalLibraries, totalDays, librerias);
+					solutions = Algorithm.DD(totalBooks, totalLibraries, totalDays, librerias);
 					break;
 				}
 

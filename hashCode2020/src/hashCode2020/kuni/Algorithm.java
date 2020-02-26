@@ -1,8 +1,10 @@
 package hashCode2020.kuni;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 
 public class Algorithm {
 
@@ -51,6 +53,40 @@ public class Algorithm {
 
 	public static void C() {
 
+	}
+	
+	public static List<Library> DD(Integer totalBooks, Integer totalLibraries, Integer totalDays,
+			List<Library> librerias) {
+		Integer day = 0;
+		List<Library> solutions = new LinkedList<Library>();
+		while (day < totalDays && !librerias.isEmpty()) {
+			Entry<Integer, List<Library>> entryBest = null;
+			int max = 0;
+			for (Entry<Integer, List<Library>> entry : Library.mapLibros.entrySet()) {
+				if (entry.getValue().size() > max) {
+					entryBest = entry;
+					max = entry.getValue().size();
+				}
+			}
+			
+			Integer key = entryBest.getKey();
+			List<Library> value = entryBest.getValue();
+			int min = Integer.MAX_VALUE;
+			Library library = null;
+			for (Library l : value) {
+				if (l.getBooks().size() < min) {
+					min = l.getBooks().size();
+					library = l;
+				}
+			}
+			day += library.getSignUp();
+			if (day < totalDays) {
+				library.scanBooks2(day, totalDays);
+				librerias.remove(library);
+				solutions.add(library);
+			}
+		}
+		return solutions;
 	}
 
 	public static List<Library> D(Integer totalBooks, Integer totalLibraries, Integer totalDays,
